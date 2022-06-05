@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:validation="http://www.mulesoft.org/schema/mule/validation" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/validation http://www.mulesoft.org/schema/mule/validation/current/mule-validation.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="245a0591-ee46-4307-87b6-b4df69504bcb" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<flow name="privateflow" doc:id="7184b427-0287-46db-a768-9591ab6a33fe" >
+		<logger level="INFO" doc:name="Logger" doc:id="60809922-1ea2-416b-8a57-6dc14ee14080" />
+		<validation:is-null doc:id="2afac7a3-3c1d-43e3-8c29-88634842f0ca" value="#[payload]"/>
+		<logger level="INFO" doc:name="Logger" doc:id="dedd56ce-45af-47d6-8def-47d54298976b" />
+		<error-handler >
+			<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="8425c490-cfab-4b1e-b968-804fcf6e4d94" >
+				<logger level="INFO" doc:name="Logger" doc:id="bc825579-17a4-4b83-afc7-40f75fb7352e" />
+				<logger level="INFO" doc:name="Logger" doc:id="3aecedc5-1b1f-42aa-ae46-a00fcf071135" />
+			</on-error-continue>
+		</error-handler>
+	</flow>
+	<flow name="MainFlow" doc:id="db276f37-7bfd-4b0d-bd8a-bda36210b7fe" >
+		<http:listener doc:name="Listener" doc:id="e006c997-b771-42c7-90db-b81ec2249ad2" config-ref="HTTP_Listener_config" path="/test"/>
+		<logger level="INFO" doc:name="Logger" doc:id="e78a3362-281f-4420-841e-9c430df02d6b" />
+		<flow-ref doc:name="Flow Reference" doc:id="26c425c2-9245-4edf-b530-bb8813f9cdec" name="privateflow"/>
+		<logger level="INFO" doc:name="Logger" doc:id="74a7da07-9ecb-4125-a9b1-425d7e8618be" />
+		<error-handler >
+			<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="c6f325e4-0b00-4346-993a-7d4c2db280a7" >
+				<logger level="INFO" doc:name="Logger" doc:id="48435068-4243-432f-969e-44eaca4511ac" />
+				<logger level="INFO" doc:name="Logger" doc:id="2c238f11-edee-4c25-a9d0-9be8844e33ce" />
+			</on-error-continue>
+		</error-handler>
+	</flow>
+</mule>
